@@ -13,7 +13,7 @@ export interface QFBoardState {
 }
 
 export interface QFRecordState {
-    actions: Array<ReplayMove>;
+    actions: Array<QFReplayMove>;
 }
 
 export type LastMove = {
@@ -27,7 +27,7 @@ export type LastMove = {
 
 export type WallPlacement = [number, Coordinate, WallType];
 
-export type ReplayMove = QFReplayMoveDir | QFReplayWall;
+export type QFReplayMove = QFReplayMoveDir | QFReplayWall;
 
 export type QFReplayWall = PlaceWall;
 

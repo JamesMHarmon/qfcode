@@ -1,18 +1,17 @@
-const BITS_PER_CHAR = 6;
-const B64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+import { B64_CHARS, BITS_PER_CHAR } from "./constants";
 
 export class Base64Reader {
     private static b64idxs = Array.from(B64_CHARS).reduce((map, char, index) => map.set(char, index), new Map());
     private base64: string;
     private charBits: number = 0;
-    private bitIdx: number = 0;
+    private position: number = 0;
 
     constructor(base64: string) {
         this.base64 = base64;
     }
 
     private readNextChar() {
-        const charIndex = Math.floor(this.bitIdx / BITS_PER_CHAR);
+        const charIndex = Math.floor(this.position / BITS_PER_CHAR);
         if (charIndex >= this.base64.length) {
             throw new Error("Unexpected end of base64 string");
         }
@@ -25,7 +24,7 @@ export class Base64Reader {
         let result = 0;
         let bitsRead = 0;
         while (bitsRead < numBits) {
-            const remainingBitsInChar = BITS_PER_CHAR - (this.bitIdx % BITS_PER_CHAR);
+            const remainingBitsInChar = BITS_PER_CHAR - (this.position % BITS_PER_CHAR);
 
             // Load the next character if we've read all the bits in the current character
             if (remainingBitsInChar === BITS_PER_CHAR) {
@@ -36,7 +35,7 @@ export class Base64Reader {
             const readBits = (this.charBits >> (remainingBitsInChar - numBitsToRead)) & ((1 << numBitsToRead) - 1)
             result = (result << numBitsToRead) | readBits;
 
-            this.bitIdx += numBitsToRead;
+            this.position += numBitsToRead;
             bitsRead += numBitsToRead;
         }
 
