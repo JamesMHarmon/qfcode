@@ -168,4 +168,27 @@ describe('Serialization and Deserialization', () => {
         const serialized = serialize(board);
         expect(serialized).toEqual('yzoAAIBQMBJSskqrh5dHVBA');
     });
+
+    test('serialize and deserialize wall correctly', () => {
+        const board: QFBoard = {
+            boardState: {
+                lastMove: {
+                    isWallPlacement: true,
+                    coordinate: parseCoordinate('d2'),
+                    playerNum: 2
+                },
+                moveNumber: 3,
+                playerPositions: [
+                    parseCoordinate("e2"),
+                    parseCoordinate("e9"),
+                ],
+                wallsByPlayer: [
+                    [2, parseCoordinate('d2'), WallType.Vertical],
+                ]
+            }
+        };
+
+        const serialized = serialize(board);
+        expect(serialized).toEqual('hswAAS8sAw');
+    });
 });
