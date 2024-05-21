@@ -96,10 +96,12 @@ export class QFRecordStateSerde implements Serde<QFRecordState> {
     serialize({ actions }: QFRecordState, writer: Base64Writer) {
         writer.write(10, actions.length);
         for (const action of actions) {
-            if (Number.isInteger(action)) {
-                new QFReplayMoveDirSerde().serialize(action as QFReplayMoveDir, writer);
-            } else {
+            const isPlaceWall = typeof action !== 'number';
+            writer.writeBool(isPlaceWall);
+            if (isPlaceWall) {
                 new QFReplayWallSerde().serialize(action as QFReplayWall, writer);
+            } else {
+                new QFReplayMoveDirSerde().serialize(action as QFReplayMoveDir, writer);
             }
         }
     }
@@ -107,8 +109,8 @@ export class QFRecordStateSerde implements Serde<QFRecordState> {
     deserialize(reader: Base64Reader): QFRecordState {
         const numActions = reader.read(10);
         const actions = Array.from({ length: numActions }).map<QFReplayMove>(() => {
-            const isWall = reader.readBool();
-            if (isWall) {
+            const isPlaceWall = reader.readBool();
+            if (isPlaceWall) {
                 return new QFReplayWallSerde().deserialize(reader);
             }
 

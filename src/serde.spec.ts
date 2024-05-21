@@ -37,6 +37,36 @@ describe('Serialization and Deserialization', () => {
         });
     });
 
+    test('deserialize QEBAQ', () => {
+        const board = deserialize('QEBAQ');
+        expect(board).toEqual({
+            recordState: {
+                actions: [
+                    QFReplayMoveDir.Up,
+                    QFReplayMoveDir.Down,
+                    QFReplayMoveDir.Up,
+                    QFReplayMoveDir.Down
+                ]
+            }
+        });
+    });
+
+    test('serialize QEBAQ', () => {
+        const board: QFBoard = {
+            recordState: {
+                actions: [
+                    QFReplayMoveDir.Up,
+                    QFReplayMoveDir.Down,
+                    QFReplayMoveDir.Up,
+                    QFReplayMoveDir.Down
+                ]
+            }
+        };
+
+        const serialized = serialize(board);
+        expect(serialized).toEqual('QEBAQ');
+    });
+
     test('serialize lB8klDRh2KqwlZXYEg', () => {
         const board: QFBoard = {
             boardState: {
