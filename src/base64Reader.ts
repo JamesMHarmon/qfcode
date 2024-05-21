@@ -21,6 +21,10 @@ export class Base64Reader {
     }
 
     public read(numBits: number): number {
+        if (numBits <= 0) {
+            return 0;
+        }
+
         let result = 0;
         let bitsRead = 0;
         while (bitsRead < numBits) {

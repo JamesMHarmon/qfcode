@@ -3,6 +3,13 @@ import { Base64Reader } from './base64Reader';
 import { Base64Writer } from './base64Writer';
 import { LastMove, QFBoard, QFBoardState, QFRecordState, QFReplayMove, QFReplayMoveDir, QFReplayWall, WallPlacement } from './qfboard';
 
+export function serialize(board: QFBoard): string {
+    const writer = new Base64Writer();
+    new QFBoardSerde().serialize(board, writer);
+    return writer.getBase64();
+
+}
+
 export function deserialize(base64: string): QFBoard {
     const reader = new Base64Reader(base64);
     const deserializer = new QFBoardSerde();
@@ -209,7 +216,7 @@ export class LastMoveSerde implements Serde<LastMove> {
 
         return {
             playerNum,
-            isWallPlacement
+            isWallPlacement: false
         };
     }
 }
